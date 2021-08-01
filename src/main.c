@@ -8,6 +8,11 @@
 
 int main(int argc, char **argv)
 {
+    chip8_t cpu;
+
+    chip8_memory_set(&cpu.memory, 50, '2');
+    printf("Memcheck: %c\n", chip8_memory_get(&cpu.memory, 50));
+
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window *window = SDL_CreateWindow(
         EMULATOR_WINDOW_TITLE, // Window title
