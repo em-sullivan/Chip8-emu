@@ -3,7 +3,7 @@
  */
 
 #include <stdio.h>
-#include "chip8_memory.h"
+#include "ch8_mem.h"
 
 void chip8_memory_set(chip8_mem_t *memory, uint32_t index, uint8_t value)
 {
