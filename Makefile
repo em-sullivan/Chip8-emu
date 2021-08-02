@@ -1,5 +1,5 @@
 CFLAGS = -g -Wall -o2
-OBJS = ./build/ch8_mem.o
+OBJS = ./build/ch8_mem.o ./build/ch8_stack.o
 
 all: $(OBJS)
 	$(CC) $(CFLAGS) ./src/main.c $(OBJS) -lSDL2main -lSDL2 -o ./bin/main

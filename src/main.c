@@ -10,8 +10,17 @@ int main(int argc, char **argv)
 {
     chip8_t cpu;
 
+    // memtest
     chip8_memory_set(&cpu.memory, 50, '2');
     printf("Memcheck: %c\n", chip8_memory_get(&cpu.memory, 50));
+
+    // stacktest
+    cpu.registers.SP = 0;
+    chip8_stack_push(&cpu, 0xFF);
+    chip8_stack_push(&cpu, 0xAA);
+
+    for (int i = 0; i < 2; i++)
+        printf("Pop %x\n", chip8_stack_pop(&cpu));
 
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window *window = SDL_CreateWindow(
