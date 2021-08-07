@@ -15,4 +15,6 @@
 
 #define CHIP8_TOTAL_KEYS            16
 
+#define CHIP8_CHARACTER_SET_ADDR    0x00
+
 #endif // CONFIG_H
