@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ch8_stack.h"
+#include "chip8_stack.h"
 #include "chip8.h"
 
 

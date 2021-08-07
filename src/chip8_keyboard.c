@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include "ch8_keyboard.h"
+#include "chip8_keyboard.h"
 
 uint8_t chip8_keyboard_map(const char *map, int key)
 {

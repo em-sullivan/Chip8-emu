@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include "chip8.h"
-#include "ch8_keyboard.h"
+#include "chip8_keyboard.h"
 
 const char  keyboard_map[CHIP8_TOTAL_KEYS] = {
     SDLK_0, SDLK_1,SDLK_2, SDLK_3,

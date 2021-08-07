@@ -1,5 +1,5 @@
-#ifndef CH8_KEYBOARD_H
-#define CH8_KEYBOARD_H
+#ifndef CHIP8_KEYBOARD_H
+#define CHIP8_KEYBOARD_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -23,4 +23,4 @@ void chip8_keyboard_down(chip8_keyboard_t *keyboard, uint8_t key);
 void chip8_keyboard_up(chip8_keyboard_t *keyboard, uint8_t key);
 bool chip8_keyboard_is_down(chip8_keyboard_t *keyboard, uint8_t key);
 
-#endif // CH8_KEYBOARD_H
+#endif // CHIP8_KEYBOARD_H

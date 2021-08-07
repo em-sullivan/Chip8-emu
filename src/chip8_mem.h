@@ -1,5 +1,5 @@
-#ifndef CH8_MEM_H
-#define CH8_MEM_H
+#ifndef CHIP8_MEM_H
+#define CHIP8_MEM_H
 
 #include <stdint.h>
 #include "config.h"
@@ -12,4 +12,4 @@ typedef struct chip8_mem_t {
 void chip8_memory_set(chip8_mem_t *memory, uint32_t index, uint8_t value);
 uint8_t chip8_memory_get(chip8_mem_t *memory, uint32_t index);
 
-#endif // CH8_MEM_H
+#endif // CHIP8_MEM_H

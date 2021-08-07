@@ -2,10 +2,10 @@
 #define CHIP8_H
 
 #include "config.h"
-#include "ch8_stack.h"
-#include "ch8_mem.h"
-#include "ch8_keyboard.h"
-#include "registers.h"
+#include "chip8_stack.h"
+#include "chip8_mem.h"
+#include "chip8_keyboard.h"
+#include "chip8_registers.h"
 
 typedef struct chip8_t {
     chip8_mem_t memory;
