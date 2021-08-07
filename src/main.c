@@ -18,6 +18,8 @@ int main(int argc, char **argv)
 {
     chip8_t cpu;
 
+    chip8_init(&cpu);
+
 // Some test shit
 #if 0
     // memtest

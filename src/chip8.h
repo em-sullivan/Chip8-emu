@@ -14,4 +14,6 @@ typedef struct chip8_t {
     chip8_keyboard_t keyboard;
 } chip8_t;
 
+void chip8_init(chip8_t *chip8);
+
 #endif // CHIP8_H
