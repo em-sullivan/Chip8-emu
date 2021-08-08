@@ -7,6 +7,9 @@
 #include "chip8.h"
 #include "chip8_keyboard.h"
 
+/*
+ * Keymap - Play around with this
+ */
 const char  keyboard_map[CHIP8_TOTAL_KEYS] = {
     SDLK_0, SDLK_1,SDLK_2, SDLK_3,
     SDLK_4, SDLK_5, SDLK_6, SDLK_7,
@@ -19,6 +22,9 @@ int main(int argc, char **argv)
     chip8_t cpu;
 
     chip8_init(&cpu);
+
+    // Draw a pixel
+    chip8_screen_set(&cpu.screen, 1, 0);
 
 // Some test shit
 #if 0
@@ -84,15 +90,28 @@ int main(int argc, char **argv)
 
         SDL_SetRenderDrawColor(rend, 0, 0, 0, 0); // Black color
         SDL_RenderClear(rend);
+        SDL_SetRenderDrawColor(rend, 255, 255, 255, 0); // White color
 
-        // Draw Rectangle
-        SDL_Rect r;
-        SDL_SetRenderDrawColor(rend, 255, 0, 255, 0); // Purple
-        r.x = 0;
-        r.y = 0;
-        r.w = 40;
-        r.h = 40;
-        SDL_RenderFillRect(rend, &r);
+        for (int x = 0; x < CHIP8_WIDTH; x++) {
+            for (int y = 0; y < CHIP8_HEIGHT; y++) {
+
+                if (chip8_screen_read(&cpu.screen, x, y)) {
+
+                    // Draw "pixel"
+                    // Since the original chip8 had a 64x32 display, drawing
+                    // actual pixels would make the display really small, so
+                    // each pixel is scaled
+                    SDL_Rect r;
+                    r.x = x * CHIP8_WINDOW_MULTIPLIER;
+                    r.y = y * CHIP8_WINDOW_MULTIPLIER;
+                    r.w = CHIP8_WINDOW_MULTIPLIER;
+                    r.h = CHIP8_WINDOW_MULTIPLIER;
+                    SDL_RenderFillRect(rend, &r);
+                }
+
+            }
+        }
+
         SDL_RenderPresent(rend);
     }
 
