@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <unistd.h>
 #include "chip8.h"
 #include "chip8_keyboard.h"
 
@@ -22,6 +23,9 @@ int main(int argc, char **argv)
     chip8_t cpu;
 
     chip8_init(&cpu);
+
+    // Check if delay works
+    cpu.registers.DT = 255;
 
     chip8_screen_draw_sprite(&cpu.screen, 10, 30, &cpu.memory.memory[5], 5);
 // Some test shit
@@ -111,6 +115,14 @@ int main(int argc, char **argv)
         }
 
         SDL_RenderPresent(rend);
+
+        // If delay timer is above zero,
+        // sleep for 100 ms
+        if (cpu.registers.DT > 0) {
+            usleep(100000);
+            cpu.registers.DT--;
+            printf("Delay!\n");
+        }
     }
 
 out:
