@@ -25,7 +25,7 @@ int main(int argc, char **argv)
     chip8_init(&cpu);
 
     // Check if delay works
-    cpu.registers.DT = 255;
+    cpu.registers.ST = 255;
 
     chip8_screen_draw_sprite(&cpu.screen, 10, 30, &cpu.memory.memory[5], 5);
 // Some test shit
@@ -121,7 +121,16 @@ int main(int argc, char **argv)
         if (cpu.registers.DT > 0) {
             usleep(100000);
             cpu.registers.DT--;
-            printf("Delay!\n");
+        }
+
+        // TODO: Create beep function for linux,
+        // I can't use the regual beep because my laptop
+        // does not have a PC speaker
+        if (cpu.registers.ST > 0) {
+            // Implement Beep at some point
+            // beep(freq, 100 * cpu.registers.ST)
+            printf("BEEP\n");
+            cpu.registers.ST--;
         }
     }
 
