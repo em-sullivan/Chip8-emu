@@ -23,9 +23,7 @@ int main(int argc, char **argv)
 
     chip8_init(&cpu);
 
-    // Draw a pixel
-    chip8_screen_set(&cpu.screen, 1, 0);
-
+    chip8_screen_draw_sprite(&cpu.screen, 10, 30, &cpu.memory.memory[5], 5);
 // Some test shit
 #if 0
     // memtest

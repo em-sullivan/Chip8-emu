@@ -1,6 +1,7 @@
 #ifndef CHIP8_SCREEN_H
 #define CHIP8_SCREEN_H
 
+#include <stdint.h>
 #include <stdbool.h>
 #include "config.h"
 
@@ -16,5 +17,6 @@ typedef struct chip8_screen_t {
 
 void chip8_screen_set(chip8_screen_t *screen, int x, int y);
 bool chip8_screen_read(chip8_screen_t *screen, int x, int y);
+bool chip8_screen_draw_sprite(chip8_screen_t *screen, int x, int y, const uint8_t *sprite, int num);
 
 #endif // CHIP8_SCREEN_H
