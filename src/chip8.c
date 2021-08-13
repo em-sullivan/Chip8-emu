@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 /*
  * Sprites represeting the hexadecimal digits 0 - F
@@ -33,4 +34,20 @@ void chip8_init(chip8_t *chip8)
 
     // Load in character set into memory
     memcpy(chip8->memory.memory, chip8_character_set, sizeof(chip8_character_set));
+}
+
+
+void chip8_load(chip8_t *chip8, const uint8_t *buf, size_t size)
+{
+    // Load program into chip 8 memory (if it can fit)
+    assert(size + CHIP8_PROGRAM_LOAD_ADDR < CHIP8_MEMORY_SIZE);
+    memcpy(&chip8->memory.memory[CHIP8_PROGRAM_LOAD_ADDR], buf, size);
+
+    // Set Program counter to start of program
+    chip8->registers.PC = CHIP8_PROGRAM_LOAD_ADDR;
+}
+
+void chip8_exec(chip8_t chip8, uint16_t opcode)
+{
+
 }

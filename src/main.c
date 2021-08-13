@@ -20,28 +20,42 @@ const char  keyboard_map[CHIP8_TOTAL_KEYS] = {
 
 int main(int argc, char **argv)
 {
+    if (argc < 2) {
+        printf("Usage: Chip8 <rom>\n");
+        return -1;
+    }
+
+    const char* filename = argv[1];
+    printf("Loading %s...\n", filename);
+
+    // Load Chip8 ROM into memory
+    FILE *rom = fopen(filename, "rb");
+    if (!rom) {
+        perror("Error! Could not open file!");
+        return -2;
+    }
+
+    // Find how long the file is
+    fseek(rom, 0, SEEK_END);
+    long rom_size = ftell(rom);
+    fseek(rom, 0, SEEK_SET); // JUMP to beginning
+
+    uint8_t *buf = (uint8_t *) malloc(rom_size);
+    int res = fread(buf, rom_size, 1, rom);
+    if (res != 1) {
+        perror("Error with reading!");
+        fclose(rom);
+        return -3;
+    }
+
     chip8_t cpu;
 
     chip8_init(&cpu);
 
-    // Check if delay works
-    cpu.registers.ST = 255;
+    // Load program into chip8 memory
+    chip8_load(&cpu, buf, rom_size);
 
     chip8_screen_draw_sprite(&cpu.screen, 10, 30, &cpu.memory.memory[5], 5);
-// Some test shit
-#if 0
-    // memtest
-    chip8_memory_set(&cpu.memory, 50, '2');
-    printf("Memcheck: %c\n", chip8_memory_get(&cpu.memory, 50));
-
-    // stacktest
-    cpu.registers.SP = 0;
-    chip8_stack_push(&cpu, 0xFF);
-    chip8_stack_push(&cpu, 0xAA);
-
-    for (int i = 0; i < 2; i++)
-        printf("Pop %x\n", chip8_stack_pop(&cpu));
-#endif
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window *window = SDL_CreateWindow(
         EMULATOR_WINDOW_TITLE, // Window title
