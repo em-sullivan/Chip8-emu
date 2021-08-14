@@ -47,7 +47,7 @@ void chip8_load(chip8_t *chip8, const uint8_t *buf, size_t size)
     chip8->registers.PC = CHIP8_PROGRAM_LOAD_ADDR;
 }
 
-void chip8_exec(chip8_t chip8, uint16_t opcode)
+void chip8_exec(chip8_t *chip8, uint16_t opcode)
 {
 
 }

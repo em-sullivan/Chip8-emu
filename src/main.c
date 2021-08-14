@@ -55,6 +55,11 @@ int main(int argc, char **argv)
     // Load program into chip8 memory
     chip8_load(&cpu, buf, rom_size);
 
+    // Entire game is im memory now, so lets free up the buffer
+    // and close the file
+    free(buf);
+    fclose(rom);
+
     chip8_screen_draw_sprite(&cpu.screen, 10, 30, &cpu.memory.memory[5], 5);
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window *window = SDL_CreateWindow(
@@ -146,6 +151,12 @@ int main(int argc, char **argv)
             printf("BEEP\n");
             cpu.registers.ST--;
         }
+
+        // Execute OPCode
+        uint16_t opcode = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
+        chip8_exec(&cpu, opcode);
+        cpu.registers.PC += 2; // Increment program counter to next
+        printf("%x\n", opcode);
     }
 
 out:
