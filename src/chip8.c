@@ -84,7 +84,7 @@ static void chip8_exec_extended_8(chip8_t *chip8, uint16_t opcode)
             // Lowest 8 bits are stored in Vx
             result = chip8->registers.V[x] + chip8->registers.V[y];
             chip8->registers.V[0xF] = result > 255 ? 1 : 0;
-            chip8->registers.V[x] = result & 0xFF;
+            chip8->registers.V[x] = result;
             break;
 
         case 0x05: // SUB Vx, Vy, VF = Not Borrow
@@ -117,7 +117,7 @@ static void chip8_exec_extended_8(chip8_t *chip8, uint16_t opcode)
     }
 }
 
-static uint8_t wait_for_key_press(chip8_t chip8)
+static uint8_t wait_for_key_press(chip8_t *chip8)
 {
     SDL_Event event;
     while (SDL_WaitEvent(&event)) {
@@ -125,13 +125,20 @@ static uint8_t wait_for_key_press(chip8_t chip8)
             continue;
         }
 
-        uint8_t c = event.key.keysym.sym;
+        char c = event.key.keysym.sym;
+        uint8_t chip8_key = chip8_keyboard_map(&chip8->keyboard, c);
+        if (chip8_key != -1) {
+            return chip8_key;
+        }
     }
+
+    return -1;
 }
 
 static void chip8_exec_extended_F(chip8_t *chip8, uint16_t opcode)
 {
-    uint8_t x = (opcode >> 8) * 0x0F;
+    uint8_t x = (opcode >> 8) & 0x0F;
+    int i;
 
     switch (opcode & 0x00FF) {
         case 0x07: // LD Vx, DT
@@ -141,14 +148,53 @@ static void chip8_exec_extended_F(chip8_t *chip8, uint16_t opcode)
 
         case 0x0A: // LD Vx, K
             // Wait for a key press, store the value of the key in Vx
+            uint8_t pressed_key = wait_for_key_press(chip8);
+            chip8->registers.V[x] = pressed_key;
             break;
 
-        case 0x15:
+        case 0x15: // LD DT, Vx
+            // Set delay timer to Vx
+            chip8->registers.DT = chip8->registers.V[x];
             break;
 
-        case 0x18:
+        case 0x18: // KD St, Vx
+            // Set sound timer to Vx
+            chip8->registers.ST = chip8->registers.V[x];
             break;
 
+        case 0x1E: // Add I, Vx
+            // Set I as I + Vx
+            chip8->registers.I += chip8->registers.V[x];
+            break;
+
+        case 0x29: // LD F, Vx
+            // Set I to location of sprite Vx
+            chip8->registers.I = chip8->registers.V[x] * CHIP8_DEFAULT_SPRITE_HEIGHT;
+            break;
+
+        case 0x33: // LD B, Vx
+            // Store BCD of VX in memory location I, I+1, I+2
+            uint8_t hund = chip8->registers.V[x] / 100;
+            uint8_t tens = chip8->registers.V[x] / 10 % 10;
+            uint8_t ones = chip8->registers.V[x] % 10;
+            chip8_memory_set(&chip8->memory, chip8->registers.I, hund);
+            chip8_memory_set(&chip8->memory, chip8->registers.I + 1, tens);
+            chip8_memory_set(&chip8->memory, chip8->registers.I + 2, ones);
+            break;
+
+        case 0x55: // LD [I], Vx
+            // Store registers V0 through Vx in memory starting at I
+            for(i = 0; i <= x; i++) {
+                chip8_memory_set(&chip8->memory, chip8->registers.I + i,  chip8->registers.V[i]);
+            }
+            break;
+
+        case 0x65: // LD Vx, [I]
+            // Reads in memory to V0 through Vx starting at I
+            for (i = 0; i <= x; i++) {
+                chip8->registers.V[i] = chip8_memory_get(&chip8->memory, chip8->registers.I + i);
+            }
+            break;
     }
 }
 
@@ -233,7 +279,7 @@ static void chip8_exec_extended(chip8_t *chip8, uint16_t opcode)
         case 0xD000: // DRW Vx, Vy, nibble
             // Display n-byte sprite starting at memory location I at (Vx, Vy), set Vf = Collision
             // I points to sprite you want to draw
-            const uint8_t *sprite = &chip8->memory.memory[chip8->registers.I];
+            const uint8_t *sprite = (const uint8_t *)&chip8->memory.memory[chip8->registers.I];
             chip8->registers.V[0xF] = chip8_screen_draw_sprite(&chip8->screen,
                 chip8->registers.V[x], chip8->registers.V[y], sprite, n);
             break;
@@ -270,12 +316,12 @@ static void chip8_exec_extended(chip8_t *chip8, uint16_t opcode)
 void chip8_exec(chip8_t *chip8, uint16_t opcode)
 {
     switch (opcode) {
-        case CLS:
+        case 0x00E0: // CLR
             // Clear the display
             chip8_screen_clear(&(chip8->screen));
             break;
 
-        case RET:
+        case 0x00EE: // RET
             // Return from subroutine:
             // The interperter sets the PC to the address at the top of the stack,
             // then subtracts 1 from the stack pointer

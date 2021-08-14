@@ -109,13 +109,17 @@ int main(int argc, char **argv)
         SDL_WINDOW_SHOWN
     );
 
+    // TEST
+    //cpu.registers.V[0] = 0x00;
+    //chip8_exec(&cpu, 0xF00A);
+
     SDL_Renderer *rend = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
 
     char key; // Actual key being pressed
     uint8_t vkey; // Virtual key on Chip8
 
+    SDL_Event event;
     while (1) {
-        SDL_Event event;
 
         // Poll for events
         while (SDL_PollEvent(&event)) {
@@ -176,7 +180,7 @@ int main(int argc, char **argv)
         // If delay timer is above zero,
         // sleep for 100 ms
         if (cpu.registers.DT > 0) {
-            usleep(1000000);
+            usleep(1000);
             cpu.registers.DT--;
         }
 
