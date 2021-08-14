@@ -180,7 +180,7 @@ int main(int argc, char **argv)
         // If delay timer is above zero,
         // sleep for 100 ms
         if (cpu.registers.DT > 0) {
-            usleep(1000);
+            usleep(10000);
             cpu.registers.DT--;
         }
 
@@ -191,14 +191,13 @@ int main(int argc, char **argv)
             // Implement Beep at some point
             // beep(freq, 100 * cpu.registers.ST)
             printf("BEEP\n");
-            cpu.registers.ST--;
+            cpu.registers.ST = 0;
         }
 
         // Execute OPCode
         uint16_t opcode = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
         cpu.registers.PC += 2; // Increment program counter to next
         chip8_exec(&cpu, opcode);
-        printf("%x\n", opcode);
     }
 
 out:
