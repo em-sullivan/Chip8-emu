@@ -3,14 +3,20 @@
 #include <stdint.h>
 #include "chip8_keyboard.h"
 
-uint8_t chip8_keyboard_map(const char *map, int key)
+
+void chip8_keyboard_set_map(chip8_keyboard_t *keyboard, const char *map)
+{
+    keyboard->keyboard_map = map;
+}
+
+uint8_t chip8_keyboard_map(chip8_keyboard_t *keyboard, int key)
 {
     if (key < 0 && key > 0xf) {
         fprintf(stderr, "Error! Key %d is out of boards for key pad!\n", key);
     }
 
     for (int i = 0; i < CHIP8_TOTAL_KEYS; i++) {
-        if (map[i] == key) {
+        if (keyboard->keyboard_map[i] == key) {
             return i;
         }
     }

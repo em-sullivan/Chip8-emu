@@ -10,6 +10,17 @@
 #include "chip8_registers.h"
 #include "chip8_screen.h"
 
+typedef enum chip8_opcode_t {
+    CLS  = 0x00E0,
+    RET  = 0x00EE,
+    JP   = 0x1000,
+    CALL = 0x2000,
+    //SE   = 0x3000,
+    SNE  = 0x4000,
+    SE   = 0x5000,
+    LD   = 0x6000
+} chip8_opcode_t;
+
 typedef struct chip8_t {
     chip8_mem_t memory;
     chip8_stack_t stack;

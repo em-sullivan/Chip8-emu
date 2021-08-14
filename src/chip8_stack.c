@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h> // For memset
 #include "chip8_stack.h"
 #include "chip8.h"
 
@@ -10,6 +12,7 @@ void chip8_stack_push(chip8_t *chip8, uint16_t value)
         chip8->registers.SP++;
     } else {
         fprintf(stderr, "Error: Chip8 stack overflow!\n");
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -20,7 +23,15 @@ uint16_t chip8_stack_pop(chip8_t *chip8)
         return chip8->stack.stack[chip8->registers.SP];
     } else {
         fprintf(stderr, "Error: Chip8 stack underflow!\n");
-        chip8->registers.SP++;
+        exit(EXIT_FAILURE);
+        //chip8->registers.SP++;
         return 0;
     }
+}
+
+
+void chip8_screen_clear(chip8_screen_t *screen)
+{
+    // Clear the screen by setting all the pixels to 0
+    memset(screen->pixels, 0, sizeof(screen->pixels));
 }

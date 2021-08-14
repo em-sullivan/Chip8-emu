@@ -60,7 +60,45 @@ int main(int argc, char **argv)
     free(buf);
     fclose(rom);
 
-    chip8_screen_draw_sprite(&cpu.screen, 10, 30, &cpu.memory.memory[5], 5);
+    // Set keyboard map
+    chip8_keyboard_set_map(&cpu.keyboard, keyboard_map);
+
+    // Sreen draw test
+    //chip8_screen_draw_sprite(&cpu.screen, 10, 30, &cpu.memory.memory[5], 5);
+
+    // CLS Test
+    //chip8_exec(&cpu, 0x00E0);
+
+    // JP TEST
+    //chip8_exec(&cpu, 0x1FF2);
+    //printf("%x\n", cpu.registers.PC);
+
+    // SE TEST
+    //cpu.registers.PC = 0x00;
+    //cpu.registers.V[0] = 0x22;
+    //chip8_exec(&cpu, 0x3022);
+    //printf("%x\n", cpu.registers.PC);
+
+
+    // LD TEST
+    // cpu.registers.V[0] = 1;
+    // cpu.registers.V[2] = 2;
+    // chip8_exec(&cpu, 0x8020);
+    // printf("%x\n", cpu.registers.V[0]);
+
+    // ADD TEST
+    //cpu.registers.V[0] = 255;
+    //cpu.registers.V[1] = 1;
+    //chip8_exec(&cpu, 0x8014);
+    //printf("%x\n", cpu.registers.V[0]);
+    //printf("%x\n", cpu.registers.V[0xF]);
+
+    // Test DRWi
+    // cpu.registers.I = 0;
+    // cpu.registers.V[0] = 10;
+    // cpu.registers.V[1] = 10;
+    // chip8_exec(&cpu, 0xD015);
+
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window *window = SDL_CreateWindow(
         EMULATOR_WINDOW_TITLE, // Window title
@@ -90,7 +128,7 @@ int main(int argc, char **argv)
 
                 case SDL_KEYDOWN:
                     key = event.key.keysym.sym;
-                    vkey = chip8_keyboard_map(keyboard_map, key);
+                    vkey = chip8_keyboard_map(&cpu.keyboard, key);
                     if (vkey != -1) {
                         chip8_keyboard_down(&cpu.keyboard, vkey);
                     }
@@ -99,7 +137,7 @@ int main(int argc, char **argv)
 
                 case SDL_KEYUP:
                     key = event.key.keysym.sym;
-                    vkey = chip8_keyboard_map(keyboard_map, key);
+                    vkey = chip8_keyboard_map(&cpu.keyboard, key);
                     if (vkey != -1) {
                         chip8_keyboard_up(&cpu.keyboard, vkey);
                     }
@@ -138,7 +176,7 @@ int main(int argc, char **argv)
         // If delay timer is above zero,
         // sleep for 100 ms
         if (cpu.registers.DT > 0) {
-            usleep(100000);
+            usleep(1000000);
             cpu.registers.DT--;
         }
 
@@ -154,8 +192,8 @@ int main(int argc, char **argv)
 
         // Execute OPCode
         uint16_t opcode = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
-        chip8_exec(&cpu, opcode);
         cpu.registers.PC += 2; // Increment program counter to next
+        chip8_exec(&cpu, opcode);
         printf("%x\n", opcode);
     }
 

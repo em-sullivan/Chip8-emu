@@ -16,9 +16,11 @@
 
 typedef struct chip8_keyboard_t {
     bool keyboard[CHIP8_TOTAL_KEYS];
+    const char *keyboard_map;
 } chip8_keyboard_t;
 
-uint8_t chip8_keyboard_map(const char *map, int key);
+void chip8_keyboard_set_map(chip8_keyboard_t *keyboard, const char *map);
+uint8_t chip8_keyboard_map(chip8_keyboard_t *keyboard, int key);
 void chip8_keyboard_down(chip8_keyboard_t *keyboard, uint8_t key);
 void chip8_keyboard_up(chip8_keyboard_t *keyboard, uint8_t key);
 bool chip8_keyboard_is_down(chip8_keyboard_t *keyboard, uint8_t key);
