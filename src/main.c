@@ -63,42 +63,7 @@ int main(int argc, char **argv)
     // Set keyboard map
     chip8_keyboard_set_map(&cpu.keyboard, keyboard_map);
 
-    // Sreen draw test
-    //chip8_screen_draw_sprite(&cpu.screen, 10, 30, &cpu.memory.memory[5], 5);
-
-    // CLS Test
-    //chip8_exec(&cpu, 0x00E0);
-
-    // JP TEST
-    //chip8_exec(&cpu, 0x1FF2);
-    //printf("%x\n", cpu.registers.PC);
-
-    // SE TEST
-    //cpu.registers.PC = 0x00;
-    //cpu.registers.V[0] = 0x22;
-    //chip8_exec(&cpu, 0x3022);
-    //printf("%x\n", cpu.registers.PC);
-
-
-    // LD TEST
-    // cpu.registers.V[0] = 1;
-    // cpu.registers.V[2] = 2;
-    // chip8_exec(&cpu, 0x8020);
-    // printf("%x\n", cpu.registers.V[0]);
-
-    // ADD TEST
-    //cpu.registers.V[0] = 255;
-    //cpu.registers.V[1] = 1;
-    //chip8_exec(&cpu, 0x8014);
-    //printf("%x\n", cpu.registers.V[0]);
-    //printf("%x\n", cpu.registers.V[0xF]);
-
-    // Test DRWi
-    // cpu.registers.I = 0;
-    // cpu.registers.V[0] = 10;
-    // cpu.registers.V[1] = 10;
-    // chip8_exec(&cpu, 0xD015);
-
+    // Init SDL and app window
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window *window = SDL_CreateWindow(
         EMULATOR_WINDOW_TITLE, // Window title
@@ -109,16 +74,12 @@ int main(int argc, char **argv)
         SDL_WINDOW_SHOWN
     );
 
-    // TEST
-    //cpu.registers.V[0] = 0x00;
-    //chip8_exec(&cpu, 0xF00A);
-
     SDL_Renderer *rend = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
 
     char key; // Actual key being pressed
     uint8_t vkey; // Virtual key on Chip8
-
     SDL_Event event;
+
     while (1) {
 
         // Poll for events
@@ -180,7 +141,7 @@ int main(int argc, char **argv)
         // If delay timer is above zero,
         // sleep for 100 ms
         if (cpu.registers.DT > 0) {
-            usleep(10000);
+            usleep(CHIP8_DELAY_TIMER);
             cpu.registers.DT--;
         }
 

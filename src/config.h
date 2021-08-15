@@ -20,4 +20,6 @@
 
 #define CHIP8_DEFAULT_SPRITE_HEIGHT 5
 
+#define CHIP8_DELAY_TIMER           5000
+
 #endif // CONFIG_H
