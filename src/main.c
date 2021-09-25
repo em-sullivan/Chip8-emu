@@ -29,36 +29,23 @@ int main(int argc, char **argv)
     printf("Loading %s...\n", filename);
 
     // Load Chip8 ROM into memory
-    FILE *rom = fopen(filename, "rb");
-    if (!rom) {
-        perror("Error! Could not open file!");
-        return -2;
+    chip8_rom_t rom;
+    if (chip8_rom_open(&rom, filename) == false) {
+        perror("Error! Could not load rom file!");
+        return -1;
     }
 
-    // Find how long the file is
-    fseek(rom, 0, SEEK_END);
-    long rom_size = ftell(rom);
-    fseek(rom, 0, SEEK_SET); // JUMP to beginning
-
-    uint8_t *buf = (uint8_t *) malloc(rom_size);
-    int res = fread(buf, rom_size, 1, rom);
-    if (res != 1) {
-        perror("Error with reading!");
-        fclose(rom);
-        return -3;
-    }
-
+    // Init Chip8
     chip8_t cpu;
-
     chip8_init(&cpu);
 
     // Load program into chip8 memory
-    chip8_load(&cpu, buf, rom_size);
+    //chip8_load(&cpu, buf, rom_size);
+    chip8_rom_load_into_memory(&rom, &cpu);
 
     // Entire game is im memory now, so lets free up the buffer
     // and close the file
-    free(buf);
-    fclose(rom);
+    chip8_rom_free(&rom);
 
     // Set keyboard map
     chip8_keyboard_set_map(&cpu.keyboard, keyboard_map);

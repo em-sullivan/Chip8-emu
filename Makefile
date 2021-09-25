@@ -1,7 +1,7 @@
 TARGET = Chip8
 CFLAGS = -g -Wall -o2
 LIBS = -lSDL2main -lSDL2
-OBJS = ./build/chip8_mem.o ./build/chip8_stack.o ./build/chip8_keyboard.o ./build/chip8.o ./build/chip8_screen.o
+OBJS = ./build/chip8_mem.o ./build/chip8_stack.o ./build/chip8_keyboard.o ./build/chip8.o ./build/chip8_screen.o ./build/chip8_rom.o
 
 
 all: $(OBJS)

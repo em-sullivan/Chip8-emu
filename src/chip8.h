@@ -9,6 +9,7 @@
 #include "chip8_keyboard.h"
 #include "chip8_registers.h"
 #include "chip8_screen.h"
+#include "chip8_rom.h"
 
 typedef enum chip8_opcode_t {
     CLS  = 0x00E0,
