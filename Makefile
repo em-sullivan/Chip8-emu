@@ -8,7 +8,7 @@ all: $(OBJS)
 	$(CC) $(CFLAGS) ./src/main.c $(OBJS) $(LIBS) -o ./bin/$(TARGET)
 
 ./build/%.o: ./src/%.c
-	$(CC) $(CFLAGS) $(LIBS) -o $@ -c $<
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
 	rm -f ./bin/$(TARGET)
