@@ -40,7 +40,6 @@ int main(int argc, char **argv)
     chip8_init(&cpu);
 
     // Load program into chip8 memory
-    //chip8_load(&cpu, buf, rom_size);
     chip8_rom_load_into_memory(&rom, &cpu);
 
     // Entire game is im memory now, so lets free up the buffer
