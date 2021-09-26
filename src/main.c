@@ -125,9 +125,8 @@ int main(int argc, char **argv)
         SDL_RenderPresent(rend);
 
         // If delay timer is above zero,
-        // sleep for 100 ms
         if (cpu.registers.DT > 0) {
-            usleep(CHIP8_DELAY_TIMER);
+            SDL_Delay(10);
             cpu.registers.DT--;
         }
 
