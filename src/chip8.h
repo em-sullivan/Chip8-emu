@@ -12,6 +12,7 @@
 #include "chip8_rom.h"
 
 typedef enum chip8_opcode_t {
+    SYS  = 0x0000,
     CLS  = 0x00E0,
     RET  = 0x00EE,
     JP1  = 0x1000,
@@ -59,4 +60,5 @@ typedef struct chip8_t {
 void chip8_init(chip8_t *chip8);
 void chip8_load(chip8_t *chip8, const uint8_t *buf, size_t size);
 void chip8_exec(chip8_t *chip8, uint16_t opcode);
+void chip8_exec_WIP(chip8_t *chip8, uint16_t opcode);
 #endif // CHIP8_H
