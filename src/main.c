@@ -143,8 +143,7 @@ int main(int argc, char **argv)
         // Execute OPCode
         uint16_t opcode = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
         cpu.registers.PC += 2; // Increment program counter to next
-        //chip8_exec(&cpu, opcode);
-        chip8_exec_WIP(&cpu, opcode);
+        chip8_execute(&cpu, opcode);
     }
 
 out:
