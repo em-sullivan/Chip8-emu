@@ -308,6 +308,25 @@ void chip8_execute(chip8_t *chip8, uint16_t opcode)
     }
 }
 
+void chip8_timer_tick(chip8_t *chip8)
+{
+    // If delay timer is above zero,
+    if (chip8->registers.DT > 0) {
+        SDL_Delay(10);
+        chip8->registers.DT--;
+    }
+
+    // TODO: Create beep function for linux,
+    // I can't use the regual beep because my laptop
+    // does not have a PC speaker
+    if (chip8->registers.ST > 0) {
+        // Implement Beep at some point
+        // beep(freq, 100 * cpu.registers.ST)
+        printf("BEEP\n");
+        chip8->registers.ST = 0;
+    }
+}
+
 // Old execture code which is kind of gross, leaving it here for now
 // in case I need it
 #if 0

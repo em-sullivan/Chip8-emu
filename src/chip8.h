@@ -61,4 +61,5 @@ void chip8_init(chip8_t *chip8);
 void chip8_load(chip8_t *chip8, const uint8_t *buf, size_t size);
 void chip8_exec(chip8_t *chip8, uint16_t opcode);
 void chip8_execute(chip8_t *chip8, uint16_t instruction);
+void chip8_timer_tick(chip8_t *chip8);
 #endif // CHIP8_H

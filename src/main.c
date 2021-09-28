@@ -123,22 +123,7 @@ int main(int argc, char **argv)
         }
 
         SDL_RenderPresent(rend);
-
-        // If delay timer is above zero,
-        if (cpu.registers.DT > 0) {
-            SDL_Delay(10);
-            cpu.registers.DT--;
-        }
-
-        // TODO: Create beep function for linux,
-        // I can't use the regual beep because my laptop
-        // does not have a PC speaker
-        if (cpu.registers.ST > 0) {
-            // Implement Beep at some point
-            // beep(freq, 100 * cpu.registers.ST)
-            printf("BEEP\n");
-            cpu.registers.ST = 0;
-        }
+        chip8_timer_tick(&cpu);
 
         // Execute OPCode
         uint16_t opcode = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
