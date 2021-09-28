@@ -5,11 +5,11 @@ OBJS = ./build/chip8_mem.o ./build/chip8_stack.o ./build/chip8_keyboard.o ./buil
 
 
 all: $(OBJS)
-	$(CC) $(CFLAGS) ./src/main.c $(OBJS) $(LIBS) -o ./bin/$(TARGET)
+	$(CC) $(CFLAGS) ./src/main.c $(OBJS) $(LIBS) -o $(TARGET)
 
 ./build/%.o: ./src/%.c
 	$(CC) $(CFLAGS) -o $@ -c $<
 
 clean:
-	rm -f ./bin/$(TARGET)
+	rm -f $(TARGET)
 	rm -f ./build/*.o
