@@ -37,6 +37,8 @@ void chip8_init(chip8_t *chip8)
 
     // Load in character set into memory
     memcpy(chip8->memory.memory, chip8_character_set, sizeof(chip8_character_set));
+
+    chip8->running = true;
 }
 
 
@@ -54,6 +56,12 @@ static uint8_t wait_for_key_press(chip8_t *chip8)
 {
     SDL_Event event;
     while (SDL_WaitEvent(&event)) {
+
+        if (event.type == SDL_QUIT) {
+            // Quit out
+            chip8->running = false;
+            break;
+        }
         if (event.type != SDL_KEYDOWN) {
             continue;
         }

@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 
                 case SDL_QUIT:
                     // Quit out
-                    goto out;
+                    cpu.running = false;
                     break;
 
                 case SDL_KEYDOWN:
@@ -125,13 +125,16 @@ int main(int argc, char **argv)
         SDL_RenderPresent(rend);
         chip8_timer_tick(&cpu);
 
+        if (cpu.running == false)
+            break;
+
         // Execute OPCode
         uint16_t instruction = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
         cpu.registers.PC += 2; // Increment program counter to next
         chip8_execute(&cpu, instruction);
     }
 
-out:
+    // Exiting the emulator
     printf("Bye!/n");
     SDL_DestroyWindow(window);
     return 0;
