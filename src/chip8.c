@@ -330,7 +330,6 @@ void chip8_timer_tick(chip8_t *chip8)
 {
     // If delay timer is above zero,
     if (chip8->registers.DT > 0) {
-        SDL_Delay(10);
         chip8->registers.DT--;
     }
 

@@ -18,6 +18,17 @@ const char  keyboard_map[CHIP8_TOTAL_KEYS] = {
     SDLK_c, SDLK_d, SDLK_e, SDLK_f
 };
 
+chip8_t cpu;
+SDL_mutex *mutex;
+
+Uint32 chip8_timer_callback(Uint32 interval, void *param)
+{
+    SDL_LockMutex(mutex);
+    chip8_timer_tick(&cpu);
+    SDL_UnlockMutex(mutex);
+    return interval;
+}
+
 int main(int argc, char **argv)
 {
     if (argc < 2) {
@@ -36,7 +47,6 @@ int main(int argc, char **argv)
     }
 
     // Init Chip8
-    chip8_t cpu;
     chip8_init(&cpu);
 
     // Load program into chip8 memory
@@ -59,6 +69,12 @@ int main(int argc, char **argv)
         CHIP8_WINDOW_HEIGHT,
         SDL_WINDOW_SHOWN
     );
+
+    // Init mutex
+    mutex = SDL_CreateMutex();
+
+    // Init timer
+    SDL_TimerID id = SDL_AddTimer(20, chip8_timer_callback, NULL);
 
     SDL_Renderer *rend = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
 
@@ -132,12 +148,14 @@ int main(int argc, char **argv)
         if (cpu.running_flag == false)
             break;
 
+        SDL_LockMutex(mutex);
         for (int i = 0; i < CHIP8_CYCLES_PER_STEP; i++) {
             // Execute OPCode
             uint16_t instruction = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
             cpu.registers.PC += 2; // Increment program counter to next
             chip8_execute(&cpu, instruction);
         }
+        SDL_UnlockMutex(mutex);
 
         // Short delay between cycles
         SDL_Delay(5);
