@@ -68,28 +68,36 @@ static uint8_t wait_for_key_press(chip8_t *chip8)
     return -1;
 }
 
-void chip8_execute(chip8_t *chip8, uint16_t opcode)
+chip8_opcode_t chip8_parse_opcode(uint16_t instruction)
 {
-    uint16_t nnn = opcode & 0x0FFF;     // 12-bit constant
-    uint8_t x = (opcode >> 8) & 0x0F;   // Register X
-    uint8_t y = (opcode >> 4) & 0x0F;   // Register Y
-    uint8_t kk = opcode & 0x00FF;       // Byte constant
-    uint8_t n = opcode & 0x000F;        // Last nibble
-    uint16_t result, i;
+    chip8_opcode_t opcode;
+    uint16_t mask = 0xF000 & instruction;
 
-    chip8_opcode_t op;
-    uint16_t mask = 0xF000 & opcode;
     if (mask == 0x8000) {
-        op = opcode & 0xF00F;
+        opcode = instruction & 0xF00F;
     } else if((mask == 0xF000) || (mask == 0xE000)) {
-        op = opcode & 0xF0FF;
+        opcode = instruction & 0xF0FF;
     } else if (mask != 0) {
-        op = mask;
+        opcode = mask;
     } else {
-        op = opcode & 0x00FF;
+        opcode = instruction & 0x00FF;
     }
 
-    switch (op) {
+    return opcode;
+}
+
+void chip8_execute(chip8_t *chip8, uint16_t instruction)
+{
+    uint16_t nnn = instruction & 0x0FFF;     // 12-bit constant
+    uint8_t x = (instruction >> 8) & 0x0F;   // Register X
+    uint8_t y = (instruction >> 4) & 0x0F;   // Register Y
+    uint8_t kk = instruction & 0x00FF;       // Byte constant
+    uint8_t n = instruction & 0x000F;        // Last nibble
+    uint16_t result, i;
+
+    chip8_opcode_t opcode = chip8_parse_opcode(instruction);
+
+    switch (opcode) {
         case CLS:
             // Clear the display
             chip8_screen_clear(&(chip8->screen));

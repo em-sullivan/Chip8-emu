@@ -126,9 +126,9 @@ int main(int argc, char **argv)
         chip8_timer_tick(&cpu);
 
         // Execute OPCode
-        uint16_t opcode = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
+        uint16_t instruction = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
         cpu.registers.PC += 2; // Increment program counter to next
-        chip8_execute(&cpu, opcode);
+        chip8_execute(&cpu, instruction);
     }
 
 out:
