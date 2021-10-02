@@ -38,7 +38,8 @@ void chip8_init(chip8_t *chip8)
     // Load in character set into memory
     memcpy(chip8->memory.memory, chip8_character_set, sizeof(chip8_character_set));
 
-    chip8->running = true;
+    chip8->running_flag = true;
+    chip8->draw_flag = true;
 }
 
 
@@ -59,7 +60,7 @@ static uint8_t wait_for_key_press(chip8_t *chip8)
 
         if (event.type == SDL_QUIT) {
             // Quit out
-            chip8->running = false;
+            chip8->running_flag = false;
             break;
         }
         if (event.type != SDL_KEYDOWN) {
@@ -249,6 +250,7 @@ void chip8_execute(chip8_t *chip8, uint16_t instruction)
             const uint8_t *sprite = (const uint8_t *)&chip8->memory.memory[chip8->registers.I];
             chip8->registers.V[0xF] = chip8_screen_draw_sprite(&chip8->screen,
                 chip8->registers.V[x], chip8->registers.V[y], sprite, n);
+            chip8->draw_flag = true;
             break;
 
         case SKP:

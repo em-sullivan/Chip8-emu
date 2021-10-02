@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 
                 case SDL_QUIT:
                     // Quit out
-                    cpu.running = false;
+                    cpu.running_flag = false;
                     break;
 
                 case SDL_KEYDOWN:
@@ -98,34 +98,38 @@ int main(int argc, char **argv)
 
         }
 
-        SDL_SetRenderDrawColor(rend, 0, 0, 0, 0); // Black color
-        SDL_RenderClear(rend);
-        SDL_SetRenderDrawColor(rend, 255, 255, 255, 0); // White color
+        if (cpu.draw_flag) {
+            SDL_SetRenderDrawColor(rend, 0, 0, 0, 0); // Black color
+            SDL_RenderClear(rend);
+            SDL_SetRenderDrawColor(rend, 255, 255, 255, 0); // White color
 
-        for (int x = 0; x < CHIP8_WIDTH; x++) {
-            for (int y = 0; y < CHIP8_HEIGHT; y++) {
+            for (int x = 0; x < CHIP8_WIDTH; x++) {
+                for (int y = 0; y < CHIP8_HEIGHT; y++) {
 
-                if (chip8_screen_read(&cpu.screen, x, y)) {
+                    if (chip8_screen_read(&cpu.screen, x, y)) {
 
-                    // Draw "pixel"
-                    // Since the original chip8 had a 64x32 display, drawing
-                    // actual pixels would make the display really small, so
-                    // each pixel is scaled
-                    SDL_Rect r;
-                    r.x = x * CHIP8_WINDOW_MULTIPLIER;
-                    r.y = y * CHIP8_WINDOW_MULTIPLIER;
-                    r.w = CHIP8_WINDOW_MULTIPLIER;
-                    r.h = CHIP8_WINDOW_MULTIPLIER;
-                    SDL_RenderFillRect(rend, &r);
+                        // Draw "pixel"
+                        // Since the original chip8 had a 64x32 display, drawing
+                        // actual pixels would make the display really small, so
+                        // each pixel is scaled
+                        SDL_Rect r;
+                        r.x = x * CHIP8_WINDOW_MULTIPLIER;
+                        r.y = y * CHIP8_WINDOW_MULTIPLIER;
+                        r.w = CHIP8_WINDOW_MULTIPLIER;
+                        r.h = CHIP8_WINDOW_MULTIPLIER;
+                        SDL_RenderFillRect(rend, &r);
+                    }
+
                 }
-
             }
+
+            SDL_RenderPresent(rend);
+            cpu.draw_flag = false;
         }
 
-        SDL_RenderPresent(rend);
         chip8_timer_tick(&cpu);
 
-        if (cpu.running == false)
+        if (cpu.running_flag == false)
             break;
 
         // Execute OPCode

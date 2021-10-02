@@ -56,7 +56,9 @@ typedef struct chip8_t {
     chip8_keyboard_t keyboard;
     chip8_screen_t screen;
 
-    bool running;
+    // Chip8 flags
+    bool running_flag;
+    bool draw_flag;
 } chip8_t;
 
 void chip8_init(chip8_t *chip8);
