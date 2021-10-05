@@ -132,10 +132,15 @@ int main(int argc, char **argv)
         if (cpu.running_flag == false)
             break;
 
-        // Execute OPCode
-        uint16_t instruction = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
-        cpu.registers.PC += 2; // Increment program counter to next
-        chip8_execute(&cpu, instruction);
+        for (int i = 0; i < CHIP8_CYCLES_PER_STEP; i++) {
+            // Execute OPCode
+            uint16_t instruction = chip8_memory_get_short(&cpu.memory, cpu.registers.PC);
+            cpu.registers.PC += 2; // Increment program counter to next
+            chip8_execute(&cpu, instruction);
+        }
+
+        // Short delay between cycles
+        SDL_Delay(5);
     }
 
     // Exiting the emulator

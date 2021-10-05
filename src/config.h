@@ -22,4 +22,6 @@
 
 #define CHIP8_DELAY_TIMER           5000
 
+#define CHIP8_CYCLES_PER_STEP       10
+
 #endif // CONFIG_H
