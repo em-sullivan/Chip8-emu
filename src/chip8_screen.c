@@ -47,3 +47,9 @@ bool chip8_screen_draw_sprite(chip8_screen_t *screen, int x, int y, const uint8_
 
     return collision;
 }
+
+void chip8_screen_clear(chip8_screen_t *screen)
+{
+    // Clear the screen by setting all the pixels to 0
+    memset(screen->pixels, 0, sizeof(screen->pixels));
+}

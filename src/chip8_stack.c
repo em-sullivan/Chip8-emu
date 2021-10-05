@@ -28,10 +28,3 @@ uint16_t chip8_stack_pop(chip8_t *chip8)
         return 0;
     }
 }
-
-
-void chip8_screen_clear(chip8_screen_t *screen)
-{
-    // Clear the screen by setting all the pixels to 0
-    memset(screen->pixels, 0, sizeof(screen->pixels));
-}
