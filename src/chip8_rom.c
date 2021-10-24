@@ -1,3 +1,4 @@
+#include <string.h>
 #include "chip8_rom.h"
 
 bool chip8_rom_open(chip8_rom_t *chip8_rom, const char *rom_name)
@@ -23,6 +24,9 @@ bool chip8_rom_open(chip8_rom_t *chip8_rom, const char *rom_name)
         fclose(rom_file);
         return false;
     }
+
+    // Copy rom name
+    strncpy(chip8_rom->name, rom_name, strlen(rom_name));
 
     fclose(rom_file);
     return true;

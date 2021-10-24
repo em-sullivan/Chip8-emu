@@ -49,10 +49,15 @@ int main(int argc, char **argv)
     // Set keyboard map
     chip8_keyboard_set_map(&cpu.keyboard, keyboard_map);
 
+    // Set window title
+    char title_name[30] = EMULATOR_WINDOW_TITLE;
+    strncat(title_name, ": ", 3);
+    strncat(title_name, rom.name, strlen(rom.name));
+
     // Init SDL and app window
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_Window *window = SDL_CreateWindow(
-        EMULATOR_WINDOW_TITLE, // Window title
+        title_name, // Window title
         SDL_WINDOWPOS_UNDEFINED, // Position
         SDL_WINDOWPOS_UNDEFINED,
         CHIP8_WINDOW_WIDTH,
